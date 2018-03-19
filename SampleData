@@ -1,0 +1,86 @@
+
+Grower
+-------
+{
+  "$class": "org.acme.shipping.perishable.Grower",
+  "accountPK": "0017F00000WBx1rQAD",
+  "companyName": "Radish and Turnip Farm - Chile",
+  "email": "test@test.com",
+  "address": {
+    "$class": "org.acme.shipping.perishable.Address",
+    "city": "null",
+    "country": "null",
+    "street": "null"
+  },
+  "accountBalance": 10000
+}
+
+
+Importer
+---------
+{
+  "$class": "org.acme.shipping.perishable.Importer",
+  "accountPK": "0017F00000WBwcSQAT",
+  "companyName": "Organic Grocers Australia",
+  "email": "test@test.com",
+  "address": {
+    "$class": "org.acme.shipping.perishable.Address",
+    "city": "Sydney",
+    "country": "Australia",
+    "street": "Park St & George Street"
+  },
+  "accountBalance": 10000
+}
+
+
+Shipper
+-------
+{
+  "$class": "org.acme.shipping.perishable.Shipper",
+  "accountPK": "0017F00000WCDLiQAP",
+  "companyName": "Radish Shipping International",
+  "email": "test@test.com",
+  "address": {
+    "$class": "org.acme.shipping.perishable.Address",
+    "city": "London",
+    "country": "UK",
+    "street": "Fleet St"
+  },
+  "accountBalance": 10000
+}
+
+Create a Contract
+-----------------
+{
+  "$class": "org.acme.shipping.perishable.Contract",
+  "contractId": "TESTCONTRACT",
+  "grower": "resource:org.acme.shipping.perishable.Grower#0017F00000WBx1rQAD",
+  "shipper": "resource:org.acme.shipping.perishable.Shipper#0017F00000WCDLiQAP",
+  "importer": "resource:org.acme.shipping.perishable.Importer#0017F00000WBwcSQAT",
+  "arrivalDateTime": "2018-04-19T20:42:26.276Z",
+  "unitPrice": 10,
+  "minTemperature": 1,
+  "maxTemperature": 4,
+  "minPenaltyFactor": 0.1,
+  "maxPenaltyFactor": 0.2
+}
+
+Create a Shipment on the Contract
+-----------------------------------
+{
+  "$class": "org.acme.shipping.perishable.Shipment",
+  "shipmentId": "TESTSHIPMENT",
+  "type": "BANANAS",
+  "status": "CREATED",
+  "unitCount": 1000,
+  "contract": "resource:org.acme.shipping.perishable.Contract#TESTCONTRACT"
+}
+
+
+Create a Temperature Reading on the Shipment
+---------------------------------------------
+{
+  "$class": "org.acme.shipping.perishable.TemperatureReading",
+  "centigrade": 1.2,
+  "shipment": "resource:org.acme.shipping.perishable.Shipment#TESTSHIPMENT"
+}

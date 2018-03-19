@@ -108,22 +108,45 @@ function shipmentPacked(shipmentPacked) {
 
     // set the status of the shipment
     shipment.status = 'PACKED';
-    
+
     return getAssetRegistry('org.acme.shipping.perishable.Shipment')
         .then(function (shipmentRegistry) {
-      
+
     var factory = getFactory();
     var shipmentEvent = factory.newEvent('org.acme.shipping.perishable', 'ShipmentEvent');
     shipmentEvent.shipmentId=shipment.shipmentId;
     shipmentEvent.shipmentStatus='PACKED';
     shipmentEvent.description='Shipment packaging complete';
-    emit(shipmentEvent); 
+    emit(shipmentEvent);
     // update the shipment
             return shipmentRegistry.update(shipment);
         })
-        
+
 }
 
+function shipmentInTransit(shipmentInTransit) {
+
+    var shipment = shipmentInTransit.shipment;
+
+    console.log('In transit at: ' + shipmentInTransit.timestamp);
+
+    // set the status of the shipment
+    shipment.status = 'IN_TRANSIT';
+
+    return getAssetRegistry('org.acme.shipping.perishable.Shipment')
+        .then(function (shipmentRegistry) {
+
+    var factory = getFactory();
+    var shipmentEvent = factory.newEvent('org.acme.shipping.perishable', 'ShipmentEvent');
+    shipmentEvent.shipmentId=shipment.shipmentId;
+    shipmentEvent.shipmentStatus='IN_TRANSIT';
+    shipmentEvent.description='Shipment is now in transit';
+    emit(shipmentEvent);
+    // update the shipment
+            return shipmentRegistry.update(shipment);
+        })
+
+}
 
 /**
  * A temperature reading has been received for a shipment
@@ -174,7 +197,7 @@ function shipmentEventTransaction(shipmentEventTransaction) {
    shipmentEvent.shipmentStatus='STATUS';
    shipmentEvent.description='DESC';
 
-    
+
     emit(shipmentEvent);
 }
 
