@@ -29,6 +29,16 @@ function payOut(shipmentReceived) {
     // set the status of the shipment
     shipment.status = 'ARRIVED';
 
+  var factory = getFactory();
+    var shipmentEvent = factory.newEvent('org.acme.shipping.perishable', 'ShipmentEvent');
+    shipmentEvent.shipmentId=shipment.shipmentId;
+    shipmentEvent.shipmentStatus='ARRIVED';
+    shipmentEvent.description='Shipment arrived';
+    emit(shipmentEvent);
+
+
+
+
     // if the shipment did not arrive on time the payout is zero
     if (shipmentReceived.timestamp > contract.arrivalDateTime) {
         payOut = 0;
@@ -124,10 +134,14 @@ function shipmentPacked(shipmentPacked) {
 
 }
 
+/**
+ * A shipment has been received by an importer
+ * @param {org.acme.shipping.perishable.ShipmentInTransit} shipmentInTransit - the ShipmentInTransit transaction
+ * @transaction
+ */
 function shipmentInTransit(shipmentInTransit) {
 
     var shipment = shipmentInTransit.shipment;
-
     console.log('In transit at: ' + shipmentInTransit.timestamp);
 
     // set the status of the shipment
