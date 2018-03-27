@@ -170,6 +170,7 @@ function shipmentInTransit(shipmentInTransit) {
 function temperatureReading(temperatureReading) {
 
     var shipment = temperatureReading.shipment;
+    var contract = temperatureReading.shipment.contract;
 
     console.log('Adding temperature ' + temperatureReading.centigrade + ' to shipment ' + shipment.$identifier);
 
@@ -178,6 +179,28 @@ function temperatureReading(temperatureReading) {
     } else {
         shipment.temperatureReadings = [temperatureReading];
     }
+
+var statusTxt;
+var eventDesc;
+if (temperatureReading.centigrade > contract.maxTemperature) {
+  statusTxt='TEMPERATURE HI';
+  eventDesc='Temperature reading is over the contract agreement';
+} else if (temperatureReading.centigrade < contract.minTemperature) {
+  statusTxt='TEMPERATURE LO';
+  eventDesc='Temperature reading is under the contract agreement';
+} else {
+  statusTxt='TEMPERATURE NORMAL';
+    eventDesc='Temperature reading is within the range of the contract agreement';
+
+}
+
+  var factory = getFactory();
+  var shipmentEvent = factory.newEvent('org.acme.shipping.perishable', 'ShipmentEvent');
+    shipmentEvent.shipmentId=shipment.shipmentId;
+    shipmentEvent.shipmentStatus=statusTxt;
+    shipmentEvent.description=eventDesc;
+    emit(shipmentEvent);
+
 
     return getAssetRegistry('org.acme.shipping.perishable.Shipment')
         .then(function (shipmentRegistry) {
